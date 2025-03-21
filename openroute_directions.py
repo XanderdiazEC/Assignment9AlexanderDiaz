@@ -3,7 +3,7 @@ import json
 
 directions_api = "https://api.openrouteservice.org/v2/directions/driving-car"
 geocode_api = "https://api.openrouteservice.org/geocode/search"
-key = "5b3ce3597851110001cf6248bb5e17ee00824c7d9245b58a246ffdc1"  # OpenRouteService API key
+key = "5b3ce3597851110001cf6248bb5e17ee00824c7d9245b58a246ffdc1"  
 
 def geocode_address(address):
     params = {
@@ -15,7 +15,7 @@ def geocode_address(address):
         json_data = response.json()
         if json_data["features"]:
             coords = json_data["features"][0]["geometry"]["coordinates"]
-            print(f"Geocoded coordinates for '{address}': {coords}")  # Debugging
+            print(f"Geocoded coordinates for '{address}': {coords}")  
             if -90 <= coords[1] <= 90 and -180 <= coords[0] <= 180:
                 return coords
             else:
@@ -53,7 +53,7 @@ def main():
         if dest.lower() in ["quit", "q"]:
             break
             
-        # Geocode the addresses
+        
         orig_coords = geocode_address(orig)
         dest_coords = geocode_address(dest)
 
@@ -61,12 +61,12 @@ def main():
             print("Unable to geocode one or both addresses. Please try again.\n")
             continue
 
-        # Construct the request for directions
+        
         body = {
             "coordinates": [orig_coords, dest_coords]
         }
 
-        # Make the POST request
+       
         headers = {
             "Authorization": key,
             "Content-Type": "application/json"
@@ -74,7 +74,7 @@ def main():
         
         try:
             response = requests.post(directions_api, headers=headers, json=body)
-            response.raise_for_status()  # Raise an exception for HTTP errors
+            response.raise_for_status()  
             
             json_data = response.json()
             
@@ -86,7 +86,7 @@ def main():
                     print("=============================================")
                     print(f"Directions from {orig} to {dest}")
 
-                    # Extract trip duration and distance
+                    
                     duration = segment.get('duration', 0)
                     distance = segment.get('distance', 0)
 
@@ -94,7 +94,7 @@ def main():
                     print(f"Distance: {format_distance(distance)}")
                     print("=============================================")
 
-                    # Extract and print step-by-step directions
+                    
                     if 'steps' in segment:
                         print("Step-by-Step Directions:")
                         for i, step in enumerate(segment['steps'], 1):
